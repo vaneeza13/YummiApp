@@ -31,6 +31,9 @@ import com.example.yummiapp.bottomnavbar.ShoppingScreen
 import com.example.yummiapp.ui.theme.YummiAppTheme
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.ShoppingCart
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,8 +75,8 @@ fun MainScreen() {
 fun BottomNavigationBar(items: List<String>, navController: NavHostController) {
 
     BottomNavigation(
-        backgroundColor = Color.White,
-        contentColor = Color.Black
+        backgroundColor = Color(0xFFFCD4B0),
+        contentColor = Color(0xFFFB5A00)
     ) {
         val currentRoute = currentRoute(navController)
         items.forEach { item ->
@@ -81,7 +84,15 @@ fun BottomNavigationBar(items: List<String>, navController: NavHostController) {
                 selected = currentRoute == item,
                 onClick = { navController.navigate(item) },
                 label = { Text(item) },
-                icon = { Icon(Icons.Default.Favorite, contentDescription = null) } // Placeholder icon
+                icon = {
+                    when (item) {
+                        "Home" -> Icon(Icons.Default.Home, contentDescription = null)
+                        "Recipes" -> Icon(Icons.Default.List, contentDescription = null)
+                        "Favorites" -> Icon(Icons.Default.Favorite, contentDescription = null)
+                        "Shopping" -> Icon(Icons.Default.ShoppingCart, contentDescription = null)
+                        else -> Icon(Icons.Default.Favorite, contentDescription = null) // Default or fallback icon
+                    }
+                }
             )
         }
     }
