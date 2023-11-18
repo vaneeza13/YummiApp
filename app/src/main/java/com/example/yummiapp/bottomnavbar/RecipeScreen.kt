@@ -99,7 +99,10 @@ fun RecipeCard(recipe: Recipe) {
                     onClick = { /* Handle click */ },
                     modifier = Modifier
                         .align(Alignment.End)
-                        .padding(top = 8.dp)
+                        .padding(top = 8.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFFFCAB64) // Set your button's background color here
+                    )
                 ) {
                     Text("More..", color = Color.White)
                 }

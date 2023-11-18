@@ -75,8 +75,8 @@ fun MainScreen() {
 fun BottomNavigationBar(items: List<String>, navController: NavHostController) {
 
     BottomNavigation(
-        backgroundColor = Color.White,
-        contentColor = Color.Black
+        backgroundColor = Color(0xFFFCD4B0),
+        contentColor = Color(0xFFFB5A00)
     ) {
         val currentRoute = currentRoute(navController)
         items.forEach { item ->
