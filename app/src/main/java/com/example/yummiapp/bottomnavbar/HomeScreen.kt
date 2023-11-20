@@ -18,7 +18,9 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -34,18 +36,28 @@ fun HomeScreen(recipeViewModel: RecipeViewModel = viewModel()) {
         topBar = {
             SmallTopAppBar(
                 title = {
-                    Text("Yummi", color = Color.White, fontSize = 25.sp, fontWeight = FontWeight.Bold)
+                    Text(
+                        "Yummi",
+                        color = Color(0xFFA96C36),
+                        fontSize = 30.sp,
+                        fontWeight = FontWeight.Bold,
+                        fontStyle = FontStyle.Italic,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    )
                 },
-                colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = MaterialTheme.colorScheme.primary)
+                colors = TopAppBarDefaults.smallTopAppBarColors(
+                    containerColor = Color(0xFFFFF5ED)
+                )
             )
-        }
-
+        },
+        modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(horizontal = 16.dp),
+                .background(Color(0xFFFFF5ED)), // Set the background color here
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             FeatureRecipeSection()
@@ -56,13 +68,16 @@ fun HomeScreen(recipeViewModel: RecipeViewModel = viewModel()) {
     }
 }
 
+
+
 @Composable
 fun FeatureRecipeSection() {
     Surface(
         modifier = Modifier
             .fillMaxWidth()
             .height(170.dp)
-            .clip(RoundedCornerShape(16.dp)),
+            .clip(RoundedCornerShape(16.dp))
+            .background(Color(0xFFFFF5ED)), // Ensure background color consistency
         color = MaterialTheme.colorScheme.onSecondary
     ) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomStart) {
@@ -113,57 +128,67 @@ fun SearchBar(searchText: String, onSearchChanged: (String) -> Unit) {
 
 @Composable
 fun CategorySection() {
-    Column(modifier = Modifier.fillMaxWidth()) {
-        Text(
-            text = "Choose by recipe's category:",
-            fontWeight = FontWeight.Bold,
-            fontSize = 20.sp,
-            color = MaterialTheme.colorScheme.onBackground
-        )
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            CategoryItem("Breakfast", painterResource(id = R.drawable.breakfast))
-            CategoryItem("Lunch", painterResource(id = R.drawable.lunch))
-            CategoryItem("Dinner", painterResource(id = R.drawable.dinner))
-        }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            CategoryItem("Dessert", painterResource(id = R.drawable.dessert))
-            CategoryItem("Snack", painterResource(id = R.drawable.snack))
-            CategoryItem("Drinks", painterResource(id = R.drawable.drink))
-        }
+    Text(
+        text = "Choose by recipe’s category:",
+        fontWeight = FontWeight.Bold,
+        fontSize = 20.sp,
+        color = Color(0xFF4A2301),
+        modifier = Modifier.padding(horizontal = 25.dp)
+    )
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 0.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Spacer(Modifier.weight(1f))
+        CategoryItem("Breakfast", painterResource(id = R.drawable.breakfast))
+        Spacer(Modifier.weight(1f))
+        CategoryItem("Lunch", painterResource(id = R.drawable.lunch))
+        Spacer(Modifier.weight(1f))
+
+        CategoryItem("Dinner", painterResource(id = R.drawable.dinner))
+        Spacer(Modifier.weight(1f))
+
+    }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 0.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Spacer(Modifier.weight(1f))
+
+        CategoryItem("Dessert", painterResource(id = R.drawable.dessert))
+        Spacer(Modifier.weight(1f))
+
+        CategoryItem("Snack", painterResource(id = R.drawable.snack))
+        Spacer(Modifier.weight(1f))
+
+        CategoryItem("Drinks", painterResource(id = R.drawable.drink))
+        Spacer(Modifier.weight(1f))
+
     }
 }
 
 @Composable
 fun CategoryItem(name: String, icon: Painter) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Image(
-            painter = icon,
-            contentDescription = name,
-            modifier = Modifier
-                .size(88.dp)
-                .clip(RectangleShape)
-        )
-        Text(text = name, color = MaterialTheme.colorScheme.onTertiaryContainer)
-    }
+    Image(
+        painter = icon,
+        contentDescription = name,
+        modifier = Modifier
+            .size(110.dp)
+            .clip(RectangleShape)
+    )
 }
-
 @Composable
 fun SeasonalSection() {
     Text(
         text = "Seasonal ingredients:",
         fontWeight = FontWeight.Bold,
         fontSize = 20.sp,
-        color = MaterialTheme.colorScheme.onBackground
+        color = Color(0xFF4A2301),
+        modifier = Modifier.padding(horizontal = 25.dp)
     )
     Row(
         modifier = Modifier
@@ -171,7 +196,7 @@ fun SeasonalSection() {
             .padding(vertical = 8.dp),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        SeasonalItem("Pumpkin", painterResource(id = R.drawable.pumpkins))
+        SeasonalItem("Pumpkins", painterResource(id = R.drawable.pumpkins))
         SeasonalItem("Apples", painterResource(id = R.drawable.apples))
         SeasonalItem("Mushrooms", painterResource(id = R.drawable.mushrooms))
     }
