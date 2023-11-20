@@ -5,6 +5,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
@@ -20,16 +22,19 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.example.yummiapp.R
 import com.example.yummiapp.viewmodels.RecipeViewModel
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(recipeViewModel: RecipeViewModel = viewModel()) {
+fun HomeScreen(navController: NavHostController, recipeViewModel: RecipeViewModel = viewModel()) {
     var searchText by remember { mutableStateOf("") }
 
     Scaffold(
@@ -51,24 +56,55 @@ fun HomeScreen(recipeViewModel: RecipeViewModel = viewModel()) {
                 )
             )
         },
-        modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .background(Color(0xFFFFF5ED)), // Set the background color here
+                .padding(horizontal = 16.dp)
+                .background(Color(0xFFFFF5ED)),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             FeatureRecipeSection()
-            SearchBar(searchText) { searchText = it }
+            SearchBar(searchText, onSearchChanged = { searchText = it }) {
+                if (searchText.isNotBlank()) {
+                    navController.navigate("Recipes/$searchText")
+                }
+            }
             CategorySection()
             SeasonalSection()
         }
     }
 }
 
-
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SearchBar(
+    searchText: String,
+    onSearchChanged: (String) -> Unit,
+    onSearch: () -> Unit
+) {
+    OutlinedTextField(
+        value = searchText,
+        onValueChange = onSearchChanged,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(56.dp)
+            .background(Color.White, RoundedCornerShape(8.dp)),
+        placeholder = { Text(text = "Search for delicious recipes") },
+        leadingIcon = { Icon(Icons.Filled.Menu, contentDescription = null) },
+        trailingIcon = { Icon(Icons.Filled.Search, contentDescription = null) },
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            textColor = Color.Black,
+            cursorColor = Color.Black,
+            placeholderColor = Color.Gray,
+            focusedBorderColor = Color.Transparent,
+            unfocusedBorderColor = Color.Transparent
+        ),
+        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
+        keyboardActions = KeyboardActions(onSearch = { onSearch() })
+    )
+}
 
 @Composable
 fun FeatureRecipeSection() {

@@ -18,16 +18,20 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.yummiapp.bottomnavbar.FavoriteScreen
 import com.example.yummiapp.bottomnavbar.HomeScreen
 import com.example.yummiapp.bottomnavbar.RecipeScreen
 import com.example.yummiapp.bottomnavbar.ShoppingScreen
 import com.example.yummiapp.ui.theme.YummiAppTheme
+import com.example.yummiapp.viewmodels.RecipeViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,7 +43,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -47,7 +50,6 @@ fun MainScreen() {
     val navController = rememberNavController()
     val items = listOf(
         "Home",
-        "Recipes",
         "Favorites",
         "Shopping"
     )
@@ -56,14 +58,16 @@ fun MainScreen() {
         bottomBar = { BottomNavigationBar(items, navController) }
     ) {
         NavHost(navController, startDestination = "Home") {
-            composable("Home") { HomeScreen() }
-            composable("Recipes") { RecipeScreen() }
+            composable("Home") { HomeScreen(navController) }
+            composable("Recipes/{query}", arguments = listOf(navArgument("query") { type = NavType.StringType })) { backStackEntry ->
+                val recipeViewModel: RecipeViewModel = viewModel()
+                RecipeScreen(recipeViewModel, backStackEntry.arguments?.getString("query"))
+            }
             composable("Favorites") { FavoriteScreen() }
             composable("Shopping") { ShoppingScreen() }
         }
     }
 }
-
 
 @Composable
 fun BottomNavigationBar(items: List<String>, navController: NavHostController) {

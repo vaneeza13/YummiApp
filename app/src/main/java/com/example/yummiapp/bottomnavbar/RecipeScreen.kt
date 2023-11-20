@@ -21,6 +21,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,21 +29,32 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.yummiapp.R
 import com.example.yummiapp.viewmodels.Recipe
 import com.example.yummiapp.viewmodels.RecipeViewModel
 
+
 @Composable
-fun RecipeScreen(recipeViewModel: RecipeViewModel = viewModel()) {
+fun RecipeScreen(recipeViewModel: RecipeViewModel, query: String? = null) {
+    // This effect will re-fetch recipes whenever the query changes.
+    LaunchedEffect(query) {
+        query?.let {
+            if (it.isNotBlank()) {
+                recipeViewModel.searchRecipes(it)
+            }
+        }
+    }
+
+    // Observing the list of recipes and error message from the ViewModel.
     val recipes = recipeViewModel.recipes.value
     val errorMessage = recipeViewModel.errorMessage.value
 
     Column(modifier = Modifier.padding(16.dp)) {
-        Text("Recipes", style = MaterialTheme.typography.headlineLarge)
-        Spacer(modifier = Modifier.height(8.dp))
-        Text("Try our delicious recommended recipes here or back to search for more preferences :-)",
-            style = MaterialTheme.typography.bodyMedium)
+        // Modified title to show search results
+        Text(
+            text = if (!query.isNullOrBlank()) "Search result for \"$query\"" else "Recipes",
+            style = MaterialTheme.typography.headlineLarge
+        )
 
         Spacer(modifier = Modifier.height(16.dp))
         DisplayRecipeData(recipes, errorMessage)
