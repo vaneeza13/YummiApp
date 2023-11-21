@@ -33,7 +33,6 @@ import com.example.yummiapp.R
 import com.example.yummiapp.viewmodels.Recipe
 import com.example.yummiapp.viewmodels.RecipeViewModel
 
-
 @Composable
 fun RecipeScreen(recipeViewModel: RecipeViewModel, query: String? = null) {
     // This effect will re-fetch recipes whenever the query changes.
@@ -49,11 +48,16 @@ fun RecipeScreen(recipeViewModel: RecipeViewModel, query: String? = null) {
     val recipes = recipeViewModel.recipes.value
     val errorMessage = recipeViewModel.errorMessage.value
 
-    Column(modifier = Modifier.padding(16.dp)) {
-        // Modified title to show search results
+    Column(
+        modifier = Modifier
+            .padding(16.dp)
+            .fillMaxSize()
+            .background(Color(0xFFFFF5ED))
+    ) {
         Text(
             text = if (!query.isNullOrBlank()) "Search result for \"$query\"" else "Recipes",
-            style = MaterialTheme.typography.headlineLarge
+            style = MaterialTheme.typography.headlineLarge,
+            color = Color(0xFFFCAB64) // Set the title color to FCAB64
         )
 
         Spacer(modifier = Modifier.height(16.dp))
