@@ -49,7 +49,6 @@ fun RecipeScreen(recipeViewModel: RecipeViewModel, query: String? = null) {
 
     Column(
         modifier = Modifier
-            .padding(16.dp)
             .fillMaxSize()
             .background(Color(0xFFFFF5ED))
     ) {

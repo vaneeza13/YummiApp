@@ -60,8 +60,7 @@ fun HomeScreen(navController: NavHostController, recipeViewModel: RecipeViewMode
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding)
-                .padding(horizontal = 16.dp)
+                .padding(innerPadding) // Keep this to respect the app bar's inner padding
                 .background(Color(0xFFFFF5ED)),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
@@ -108,6 +107,7 @@ fun SearchBar(
 
 @Composable
 fun FeatureRecipeSection() {
+
     Surface(
         modifier = Modifier
             .fillMaxWidth()
