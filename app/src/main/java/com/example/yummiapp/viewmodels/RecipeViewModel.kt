@@ -73,20 +73,20 @@ class RecipeViewModel : ViewModel() {
         }
     }
 }
-    private suspend fun makeAPICall(query: String): Response {
-        val client = OkHttpClient()
+private suspend fun makeAPICall(query: String): Response {
+    val client = OkHttpClient()
 
-        val request = Request.Builder()
-            .url("https://recipe-by-api-ninjas.p.rapidapi.com/v1/recipe?query=$query")
-            .get()
-            .addHeader("X-RapidAPI-Key", "dea0d1e227mshdef66c06d9d9811p19a79ajsnd0169e064d08")
-            .addHeader("X-RapidAPI-Host", "recipe-by-api-ninjas.p.rapidapi.com")
-            .build()
+    val request = Request.Builder()
+        .url("https://recipe-by-api-ninjas.p.rapidapi.com/v1/recipe?query=$query")
+        .get()
+        .addHeader("X-RapidAPI-Key", "dea0d1e227mshdef66c06d9d9811p19a79ajsnd0169e064d08")
+        .addHeader("X-RapidAPI-Host", "recipe-by-api-ninjas.p.rapidapi.com")
+        .build()
 
-        return withContext(Dispatchers.IO) {
-            client.newCall(request).execute()
-        }
+    return withContext(Dispatchers.IO) {
+        client.newCall(request).execute()
     }
+}
 
 
 // Recipe Model

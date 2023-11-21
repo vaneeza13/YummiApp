@@ -28,12 +28,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
 import com.example.yummiapp.viewmodels.Recipe
 import com.example.yummiapp.viewmodels.RecipeViewModel
 
 @Composable
-fun RecipeScreen(recipeViewModel: RecipeViewModel, query: String? = null) {
+fun RecipeScreen(recipeViewModel: RecipeViewModel, navController: NavHostController, query: String? = null) {
     // This effect will re-fetch recipes whenever the query changes.
     LaunchedEffect(query) {
         query?.let {
@@ -57,6 +58,21 @@ fun RecipeScreen(recipeViewModel: RecipeViewModel, query: String? = null) {
             style = MaterialTheme.typography.headlineLarge,
             color = Color(0xFFFCAB64) // Set the title color to FCAB64
         )
+
+        Button(
+            onClick = {
+                // This line navigates back to the previous screen
+                navController.popBackStack()
+            },
+            modifier = Modifier
+                .align(Alignment.Start)
+                .padding(top = 3.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFFFB5A00)
+            )
+        ) {
+            Text("Back", color = Color.White)
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
         DisplayRecipeData(recipes, errorMessage)

@@ -59,12 +59,12 @@ fun MainScreen() {
     ) {
         NavHost(navController, startDestination = "Home") {
             composable("Home") { HomeScreen(navController) }
-            composable("Recipes/{query}", arguments = listOf(navArgument("query") { type = NavType.StringType })) { backStackEntry ->
-                val recipeViewModel: RecipeViewModel = viewModel()
-                RecipeScreen(recipeViewModel, backStackEntry.arguments?.getString("query"))
-            }
             composable("Favorites") { FavoriteScreen() }
             composable("Shopping") { ShoppingScreen() }
+            composable("Recipes/{query}", arguments = listOf(navArgument("query") { type = NavType.StringType })) { backStackEntry ->
+                val recipeViewModel: RecipeViewModel = viewModel()
+                RecipeScreen(recipeViewModel, navController, backStackEntry.arguments?.getString("query"))
+            }
         }
     }
 }
@@ -88,7 +88,7 @@ fun BottomNavigationBar(items: List<String>, navController: NavHostController) {
                         "Recipes" -> Icon(Icons.Default.List, contentDescription = null)
                         "Favorites" -> Icon(Icons.Default.Favorite, contentDescription = null)
                         "Shopping" -> Icon(Icons.Default.ShoppingCart, contentDescription = null)
-                        else -> Icon(Icons.Default.Favorite, contentDescription = null) // Default or fallback icon
+                        else -> Icon(Icons.Default.Favorite, contentDescription = null)
                     }
                 }
             )
