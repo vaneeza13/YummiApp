@@ -7,11 +7,13 @@ import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
+import org.json.JSONObject
 
 class RecipeViewModel : ViewModel() {
     private val _recipes = mutableStateOf<List<Recipe>?>(null)
@@ -28,7 +30,17 @@ class RecipeViewModel : ViewModel() {
 
                 if (data != null) {
                     val type = object : TypeToken<List<Recipe>>() {}.type
-                    _recipes.value = Gson().fromJson(data, type)
+                    var recipesList = Gson().fromJson<List<Recipe>>(data, type)
+
+                    // Fetch images for each recipe
+                    recipesList = recipesList.map { recipe ->
+                        // Launch a coroutine for each image fetch
+                        val imageDeferred = async(Dispatchers.IO) { fetchImageFromPexels(recipe.title) }
+                        val imageUrl = imageDeferred.await() ?: "default_image_url" // Use default URL if null
+                        recipe.copy(imageUrl = imageUrl)
+                    }
+
+                    _recipes.value = recipesList
                 } else {
                     _errorMessage.value = "Failed to fetch data"
                 }
@@ -39,6 +51,28 @@ class RecipeViewModel : ViewModel() {
         }
     }
 
+    suspend fun fetchImageFromPexels(query: String): String? = withContext(Dispatchers.IO) {
+        val client = OkHttpClient()
+        val request = Request.Builder()
+            .url("https://api.pexels.com/v1/search?query=$query&per_page=1")
+            .addHeader("Authorization", "gRiSNHpatgu0b7CMypuPFJaNQ9HDjT4lnaCfQyCHs2pelVZs26Hp4n0g") // Your Pexels API Key
+            .build()
+
+        try {
+            client.newCall(request).execute().use { response ->
+                if (!response.isSuccessful) return@withContext null
+
+                val jsonResponse = JSONObject(response.body?.string())
+                val firstImageUrl = jsonResponse.getJSONArray("photos").getJSONObject(0).getJSONObject("src").getString("medium")
+
+                return@withContext firstImageUrl
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return@withContext null
+        }
+    }
+}
     private suspend fun makeAPICall(query: String): Response {
         val client = OkHttpClient()
 
@@ -53,7 +87,8 @@ class RecipeViewModel : ViewModel() {
             client.newCall(request).execute()
         }
     }
-}
+
 
 // Recipe Model
-data class Recipe(val title: String, val ingredients: String, val servings: String, val instructions: String)
+data class Recipe(val title: String, val ingredients: String, val servings: String, val instructions: String,  val imageUrl: String = "default_image_url"
+)
