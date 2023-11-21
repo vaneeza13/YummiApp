@@ -117,7 +117,6 @@ fun RecipeCard(recipe: Recipe) {
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.Bold
                 )
-                IconAndText(text = recipe.title)
                 IconAndText(text = recipe.servings)
                 Button(
                     onClick = { /* Handle click */ },
