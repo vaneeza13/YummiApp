@@ -51,11 +51,12 @@ class RecipeViewModel : ViewModel() {
         }
     }
 
+
     suspend fun fetchImageFromPexels(query: String): String? = withContext(Dispatchers.IO) {
         val client = OkHttpClient()
         val request = Request.Builder()
             .url("https://api.pexels.com/v1/search?query=$query&per_page=1")
-            .addHeader("Authorization", "gRiSNHpatgu0b7CMypuPFJaNQ9HDjT4lnaCfQyCHs2pelVZs26Hp4n0g") // Your Pexels API Key
+            .addHeader("Authorization", "gRiSNHpatgu0b7CMypuPFJaNQ9HDjT4lnaCfQyCHs2pelVZs26Hp4n0g")
             .build()
 
         try {
@@ -79,7 +80,7 @@ private suspend fun makeAPICall(query: String): Response {
     val request = Request.Builder()
         .url("https://recipe-by-api-ninjas.p.rapidapi.com/v1/recipe?query=$query")
         .get()
-        .addHeader("X-RapidAPI-Key", "dea0d1e227mshdef66c06d9d9811p19a79ajsnd0169e064d08")
+        .addHeader("X-RapidAPI-Key", "4139f5fdd0msh348f64975982638p16bc88jsnd920aa37ec27")
         .addHeader("X-RapidAPI-Host", "recipe-by-api-ninjas.p.rapidapi.com")
         .build()
 

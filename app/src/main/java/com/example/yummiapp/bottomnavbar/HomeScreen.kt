@@ -2,6 +2,7 @@ package com.example.yummiapp.bottomnavbar
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -70,7 +71,9 @@ fun HomeScreen(navController: NavHostController, recipeViewModel: RecipeViewMode
                     navController.navigate("Recipes/$searchText")
                 }
             }
-            CategorySection()
+            CategorySection(onCategoryClick = { category ->
+                navController.navigate("Recipes/$category")
+            })
             SeasonalSection()
         }
     }
@@ -162,7 +165,7 @@ fun SearchBar(searchText: String, onSearchChanged: (String) -> Unit) {
 }
 
 @Composable
-fun CategorySection() {
+fun CategorySection(onCategoryClick: (String) -> Unit) {
     Text(
         text = "Choose by recipe’s category:",
         fontWeight = FontWeight.Bold,
@@ -177,12 +180,18 @@ fun CategorySection() {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Spacer(Modifier.weight(1f))
-        CategoryItem("Breakfast", painterResource(id = R.drawable.breakfast))
+        CategoryItem("Breakfast", painterResource(id = R.drawable.breakfast)) {
+            onCategoryClick("Breakfast")
+        }
         Spacer(Modifier.weight(1f))
-        CategoryItem("Lunch", painterResource(id = R.drawable.lunch))
+        CategoryItem("Lunch", painterResource(id = R.drawable.lunch)) {
+            onCategoryClick("Lunch")
+        }
         Spacer(Modifier.weight(1f))
 
-        CategoryItem("Dinner", painterResource(id = R.drawable.dinner))
+        CategoryItem("Dinner", painterResource(id = R.drawable.dinner)) {
+            onCategoryClick("Dinner")
+        }
         Spacer(Modifier.weight(1f))
 
     }
@@ -194,26 +203,32 @@ fun CategorySection() {
     ) {
         Spacer(Modifier.weight(1f))
 
-        CategoryItem("Dessert", painterResource(id = R.drawable.dessert))
+        CategoryItem("Dessert", painterResource(id = R.drawable.dessert)) {
+            onCategoryClick("Dessert")
+        }
         Spacer(Modifier.weight(1f))
 
-        CategoryItem("Snack", painterResource(id = R.drawable.snack))
+        CategoryItem("Snack", painterResource(id = R.drawable.snack)) {
+            onCategoryClick("Snack")
+        }
         Spacer(Modifier.weight(1f))
 
-        CategoryItem("Drinks", painterResource(id = R.drawable.drink))
+        CategoryItem("Drinks", painterResource(id = R.drawable.drink)) {
+            onCategoryClick("Drinks")
+        }
         Spacer(Modifier.weight(1f))
 
     }
 }
-
 @Composable
-fun CategoryItem(name: String, icon: Painter) {
+fun CategoryItem(name: String, icon: Painter, onClick: () -> Unit) {
     Image(
         painter = icon,
         contentDescription = name,
         modifier = Modifier
             .size(110.dp)
             .clip(RectangleShape)
+            .clickable { onClick() } // Add clickable modifier
     )
 }
 @Composable
