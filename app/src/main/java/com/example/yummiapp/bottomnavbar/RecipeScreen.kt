@@ -35,7 +35,7 @@ import com.example.yummiapp.viewmodels.RecipeViewModel
 
 @Composable
 fun RecipeScreen(recipeViewModel: RecipeViewModel, navController: NavHostController, query: String? = null) {
-    // This effect will re-fetch recipes whenever the query changes.
+    // this effect will re-fetch recipes when  query chang
     LaunchedEffect(query) {
         query?.let {
             if (it.isNotBlank()) {
@@ -44,7 +44,7 @@ fun RecipeScreen(recipeViewModel: RecipeViewModel, navController: NavHostControl
         }
     }
 
-    // Observing the list of recipes and error message from the ViewModel.
+    // observe the list of recipes and error message from viewmodel
     val recipes = recipeViewModel.recipes.value
     val errorMessage = recipeViewModel.errorMessage.value
 
@@ -61,7 +61,7 @@ fun RecipeScreen(recipeViewModel: RecipeViewModel, navController: NavHostControl
 
         Button(
             onClick = {
-                // This line navigates back to the previous screen
+                // navigates back to the previous screen
                 navController.popBackStack()
             },
             modifier = Modifier

@@ -51,7 +51,6 @@ class RecipeViewModel : ViewModel() {
         }
     }
 
-
     suspend fun fetchImageFromPexels(query: String): String? = withContext(Dispatchers.IO) {
         val client = OkHttpClient()
         val request = Request.Builder()

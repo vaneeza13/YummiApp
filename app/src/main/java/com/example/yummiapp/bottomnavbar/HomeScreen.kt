@@ -228,7 +228,7 @@ fun CategoryItem(name: String, icon: Painter, onClick: () -> Unit) {
         modifier = Modifier
             .size(110.dp)
             .clip(RectangleShape)
-            .clickable { onClick() } // Add clickable modifier
+            .clickable { onClick() } //  clickable modifier
     )
 }
 @Composable
