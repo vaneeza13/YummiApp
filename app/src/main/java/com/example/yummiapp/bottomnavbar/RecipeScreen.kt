@@ -34,8 +34,12 @@ import com.example.yummiapp.viewmodels.Recipe
 import com.example.yummiapp.viewmodels.RecipeViewModel
 
 @Composable
-fun RecipeScreen(recipeViewModel: RecipeViewModel, navController: NavHostController, query: String? = null) {
-    // this effect will re-fetch recipes when  query chang
+fun RecipeScreen(
+    recipeViewModel: RecipeViewModel,
+    navController: NavHostController,
+    query: String?
+) {
+    // this effect will re-fetch recipes when the query changes
     LaunchedEffect(query) {
         query?.let {
             if (it.isNotBlank()) {
@@ -44,7 +48,7 @@ fun RecipeScreen(recipeViewModel: RecipeViewModel, navController: NavHostControl
         }
     }
 
-    // observe the list of recipes and error message from viewmodel
+    // observe the list of recipes and error message from ViewModel
     val recipes = recipeViewModel.recipes.value
     val errorMessage = recipeViewModel.errorMessage.value
 
@@ -60,10 +64,7 @@ fun RecipeScreen(recipeViewModel: RecipeViewModel, navController: NavHostControl
         )
 
         Button(
-            onClick = {
-                // navigates back to the previous screen
-                navController.popBackStack()
-            },
+            onClick = { navController.popBackStack() },
             modifier = Modifier
                 .align(Alignment.Start)
                 .padding(top = 3.dp),
@@ -75,37 +76,39 @@ fun RecipeScreen(recipeViewModel: RecipeViewModel, navController: NavHostControl
         }
 
         Spacer(modifier = Modifier.height(16.dp))
-        DisplayRecipeData(recipes, errorMessage)
+        DisplayRecipeData(recipes, errorMessage, navController)
     }
 }
 
 @Composable
-fun DisplayRecipeData(recipes: List<Recipe>?, errorMessage: String?) {
+fun DisplayRecipeData(
+    recipes: List<Recipe>?,
+    errorMessage: String?,
+    navController: NavHostController
+) {
     if (errorMessage != null) {
-        Text(text = errorMessage, style = MaterialTheme.typography.bodyLarge)
+        Text(
+            text = errorMessage,
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.error
+        )
     } else {
         LazyColumn(modifier = Modifier.fillMaxSize()) {
             items(recipes.orEmpty()) { recipe ->
-                RecipeCard(recipe)
-            }
-
-            if (recipes.isNullOrEmpty()) {
-                item { Text(text = "Loading...") }
+                RecipeCard(recipe, navController)
             }
         }
     }
 }
 
 @Composable
-fun RecipeCard(recipe: Recipe) {
+fun RecipeCard(recipe: Recipe, navController: NavHostController) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp),
         shape = RoundedCornerShape(10.dp),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 6.dp
-        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -134,7 +137,10 @@ fun RecipeCard(recipe: Recipe) {
                 )
                 IconAndText(text = recipe.servings)
                 Button(
-                    onClick = { /* Handle click */ },
+                    onClick = {
+                        // Navigate to RecipeDetails with the selected recipe's ID
+                        navController.navigate("RecipeDetails/${recipe.id}")
+                    },
                     modifier = Modifier
                         .align(Alignment.End)
                         .padding(top = 8.dp),

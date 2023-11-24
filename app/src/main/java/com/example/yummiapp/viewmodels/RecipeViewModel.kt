@@ -14,12 +14,12 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import org.json.JSONObject
+import java.util.UUID
 
 class RecipeViewModel : ViewModel() {
     private val _recipes = mutableStateOf<List<Recipe>?>(null)
-    private val _errorMessage = mutableStateOf<String?>(null)
-
     val recipes: State<List<Recipe>?> = _recipes
+    private val _errorMessage = mutableStateOf<String?>(null)
     val errorMessage: State<String?> = _errorMessage
 
     fun searchRecipes(query: String) {
@@ -28,16 +28,17 @@ class RecipeViewModel : ViewModel() {
                 val response = makeAPICall(query)
                 val data = response.body?.string()
 
+
                 if (data != null) {
                     val type = object : TypeToken<List<Recipe>>() {}.type
                     var recipesList = Gson().fromJson<List<Recipe>>(data, type)
 
-                    // Fetch images for each recipe
+                    // Assign unique IDs to each recipe and fetch images
                     recipesList = recipesList.map { recipe ->
-                        // Launch a coroutine for each image fetch
+                        val uniqueID = UUID.randomUUID().toString() // Generate a unique ID
                         val imageDeferred = async(Dispatchers.IO) { fetchImageFromPexels(recipe.title) }
-                        val imageUrl = imageDeferred.await() ?: "default_image_url" // Use default URL if null
-                        recipe.copy(imageUrl = imageUrl)
+                        val imageUrl = imageDeferred.await() ?: "default_image_url"
+                        recipe.copy(id = uniqueID, imageUrl = imageUrl) // Assign ID and image URL
                     }
 
                     _recipes.value = recipesList
@@ -51,7 +52,7 @@ class RecipeViewModel : ViewModel() {
         }
     }
 
-    suspend fun fetchImageFromPexels(query: String): String? = withContext(Dispatchers.IO) {
+    private suspend fun fetchImageFromPexels(query: String): String? = withContext(Dispatchers.IO) {
         val client = OkHttpClient()
         val request = Request.Builder()
             .url("https://api.pexels.com/v1/search?query=$query&per_page=1")
@@ -72,23 +73,31 @@ class RecipeViewModel : ViewModel() {
             return@withContext null
         }
     }
-}
-private suspend fun makeAPICall(query: String): Response {
-    val client = OkHttpClient()
 
-    val request = Request.Builder()
-        .url("https://recipe-by-api-ninjas.p.rapidapi.com/v1/recipe?query=$query")
-        .get()
-        .addHeader("X-RapidAPI-Key", "4139f5fdd0msh348f64975982638p16bc88jsnd920aa37ec27")
-        .addHeader("X-RapidAPI-Host", "recipe-by-api-ninjas.p.rapidapi.com")
-        .build()
+    private suspend fun makeAPICall(query: String): Response = withContext(Dispatchers.IO) {
+        val client = OkHttpClient()
 
-    return withContext(Dispatchers.IO) {
-        client.newCall(request).execute()
+        val request = Request.Builder()
+            .url("https://recipe-by-api-ninjas.p.rapidapi.com/v1/recipe?query=$query")
+            .get()
+            .addHeader("X-RapidAPI-Key", "4139f5fdd0msh348f64975982638p16bc88jsnd920aa37ec27")
+            .addHeader("X-RapidAPI-Host", "recipe-by-api-ninjas.p.rapidapi.com")
+            .build()
+
+        return@withContext client.newCall(request).execute()
+    }
+
+    fun findRecipeById(id: String?): Recipe? {
+        return recipes.value?.find { it.id == id }
     }
 }
 
-
-// Recipe Model
-data class Recipe(val title: String, val ingredients: String, val servings: String, val instructions: String,  val imageUrl: String = "default_image_url"
+// Recipe data class
+data class Recipe(
+    val id: String = UUID.randomUUID().toString(),
+    val title: String,
+    val ingredients: String,
+    val servings: String,
+    val instructions: String,
+    var imageUrl: String = "default_image_url"
 )
