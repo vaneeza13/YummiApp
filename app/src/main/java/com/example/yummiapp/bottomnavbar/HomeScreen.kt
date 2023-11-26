@@ -40,7 +40,7 @@ fun HomeScreen(navController: NavHostController, recipeViewModel: RecipeViewMode
 
     Scaffold(
         topBar = {
-            SmallTopAppBar(
+            TopAppBar(
                 title = {
                     Text(
                         "Yummi",

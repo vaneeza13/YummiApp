@@ -37,7 +37,7 @@ class RecipeViewModel : ViewModel() {
                         val uniqueID = UUID.randomUUID().toString() // unique ID made random by ourself since api doesnt have
                         val imageDeferred = async(Dispatchers.IO) { fetchImageFromPexels(recipe.title) }
                         val imageUrl = imageDeferred.await() ?: "default_image_url"
-                        recipe.copy(id = uniqueID, imageUrl = imageUrl) // Assign ID and image URL
+                        recipe.copy(id = uniqueID, imageUrl = imageUrl)
                     }
 
                     _recipes.value = recipesList
