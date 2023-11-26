@@ -33,9 +33,8 @@ class RecipeViewModel : ViewModel() {
                     val type = object : TypeToken<List<Recipe>>() {}.type
                     var recipesList = Gson().fromJson<List<Recipe>>(data, type)
 
-                    // Assign unique IDs to each recipe and fetch images
                     recipesList = recipesList.map { recipe ->
-                        val uniqueID = UUID.randomUUID().toString() // Generate a unique ID
+                        val uniqueID = UUID.randomUUID().toString() // unique ID made random by ourself since api doesnt have
                         val imageDeferred = async(Dispatchers.IO) { fetchImageFromPexels(recipe.title) }
                         val imageUrl = imageDeferred.await() ?: "default_image_url"
                         recipe.copy(id = uniqueID, imageUrl = imageUrl) // Assign ID and image URL

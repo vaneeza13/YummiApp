@@ -115,7 +115,7 @@ fun FeatureRecipeSection() {
             .fillMaxWidth()
             .height(170.dp)
             .clip(RoundedCornerShape(16.dp))
-            .background(Color(0xFFFFF5ED)), // Ensure background color consistency
+            .background(Color(0xFFFFF5ED)),
         color = MaterialTheme.colorScheme.onSecondary
     ) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomStart) {
@@ -228,7 +228,7 @@ fun CategoryItem(name: String, icon: Painter, onClick: () -> Unit) {
         modifier = Modifier
             .size(110.dp)
             .clip(RectangleShape)
-            .clickable { onClick() } //  clickable modifier
+            .clickable { onClick() }
     )
 }
 @Composable

@@ -39,7 +39,6 @@ fun RecipeScreen(
     navController: NavHostController,
     query: String?
 ) {
-    // this effect will re-fetch recipes when the query changes
     LaunchedEffect(query) {
         query?.let {
             if (it.isNotBlank()) {
@@ -48,7 +47,6 @@ fun RecipeScreen(
         }
     }
 
-    // observe the list of recipes and error message from ViewModel
     val recipes = recipeViewModel.recipes.value
     val errorMessage = recipeViewModel.errorMessage.value
 
@@ -60,7 +58,7 @@ fun RecipeScreen(
         Text(
             text = if (!query.isNullOrBlank()) "Search result for \"$query\"" else "Recipes",
             style = MaterialTheme.typography.headlineLarge,
-            color = Color(0xFFFCAB64) // Set the title color to FCAB64
+            color = Color(0xFFFCAB64)
         )
 
         Button(
@@ -138,7 +136,6 @@ fun RecipeCard(recipe: Recipe, navController: NavHostController) {
                 IconAndText(text = recipe.servings)
                 Button(
                     onClick = {
-                        // Navigate to RecipeDetails with the selected recipe's ID
                         navController.navigate("RecipeDetails/${recipe.id}")
                     },
                     modifier = Modifier
