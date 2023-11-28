@@ -118,6 +118,7 @@ fun FeatureRecipeSection() {
             .background(Color(0xFFFFF5ED)),
         color = MaterialTheme.colorScheme.onSecondary
     ) {
+        //Øverst box med billede af dagens opskrift.//
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomStart) {
             Image(
                 painter = painterResource(id = R.drawable.spaghetti),
@@ -165,6 +166,7 @@ fun SearchBar(searchText: String, onSearchChanged: (String) -> Unit) {
 }
 
 @Composable
+//Her laves categori boxene med vector billederne sat ind//
 fun CategorySection(onCategoryClick: (String) -> Unit) {
     Text(
         text = "Choose by recipe’s category:",
@@ -232,6 +234,7 @@ fun CategoryItem(name: String, icon: Painter, onClick: () -> Unit) {
     )
 }
 @Composable
+//Her har vi rund cirkelformede til vores seasonalsection med billede //
 fun SeasonalSection() {
     Text(
         text = "Seasonal ingredients:",
