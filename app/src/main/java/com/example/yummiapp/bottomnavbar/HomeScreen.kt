@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -90,6 +91,7 @@ fun SearchBar(
         value = searchText,
         onValueChange = onSearchChanged,
         modifier = Modifier
+            .testTag("searchBar")
             .fillMaxWidth()
             .height(56.dp)
             .background(Color.White, RoundedCornerShape(8.dp)),
@@ -139,29 +141,6 @@ fun FeatureRecipeSection() {
             }
         }
     }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun SearchBar(searchText: String, onSearchChanged: (String) -> Unit) {
-    OutlinedTextField(
-        value = searchText,
-        onValueChange = onSearchChanged,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(56.dp)
-            .background(Color.White, RoundedCornerShape(8.dp)),
-        placeholder = { Text(text = "Search for delicious recipes") },
-        leadingIcon = { Icon(Icons.Filled.Menu, contentDescription = null) },
-        trailingIcon = { Icon(Icons.Filled.Search, contentDescription = null) },
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            textColor = Color.Black,
-            cursorColor = Color.Black,
-            placeholderColor = Color.Gray,
-            focusedBorderColor = Color.Transparent,
-            unfocusedBorderColor = Color.Transparent
-        )
-    )
 }
 
 @Composable
@@ -265,3 +244,5 @@ fun SeasonalItem(name: String, image: Painter) {
         Text(text = name)
     }
 }
+
+

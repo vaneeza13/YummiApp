@@ -21,6 +21,7 @@ import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
 import com.example.yummiapp.viewmodels.Recipe
 
+// recipe detail screen
 @Composable
 fun RecipeDetails(recipe: Recipe, navController: NavHostController) {
     LazyColumn(
@@ -29,6 +30,7 @@ fun RecipeDetails(recipe: Recipe, navController: NavHostController) {
             .background(Color.White)
     ) {
         item {
+            // button to go back
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -44,7 +46,7 @@ fun RecipeDetails(recipe: Recipe, navController: NavHostController) {
                 }
             }
         }
-
+        // recipe image
         item {
             Image(
                 painter = rememberImagePainter(recipe.imageUrl),
@@ -56,7 +58,7 @@ fun RecipeDetails(recipe: Recipe, navController: NavHostController) {
                 contentScale = ContentScale.Crop
             )
         }
-
+        // title of recipe
         item {
             Text(
                 text = recipe.title,
@@ -65,6 +67,7 @@ fun RecipeDetails(recipe: Recipe, navController: NavHostController) {
             )
         }
 
+        // rest is description such as serving, ingredients, instructions
         item {
             Text(
                 text = "Servings: ${recipe.servings}",

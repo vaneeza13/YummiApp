@@ -26,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -39,6 +40,7 @@ fun RecipeScreen(
     navController: NavHostController,
     query: String?
 ) {
+    // searches for recipes when the query is changed
     LaunchedEffect(query) {
         query?.let {
             if (it.isNotBlank()) {
@@ -50,6 +52,7 @@ fun RecipeScreen(
     val recipes = recipeViewModel.recipes.value
     val errorMessage = recipeViewModel.errorMessage.value
 
+    // displaying data  from query
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -74,35 +77,31 @@ fun RecipeScreen(
         }
 
         Spacer(modifier = Modifier.height(16.dp))
-        DisplayRecipeData(recipes, errorMessage, navController)
-    }
-}
 
-@Composable
-fun DisplayRecipeData(
-    recipes: List<Recipe>?,
-    errorMessage: String?,
-    navController: NavHostController
-) {
-    if (errorMessage != null) {
-        Text(
-            text = errorMessage,
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.error
-        )
-    } else {
-        LazyColumn(modifier = Modifier.fillMaxSize()) {
-            items(recipes.orEmpty()) { recipe ->
-                RecipeCard(recipe, navController)
+        // check error message
+        if (errorMessage != null) {
+            Text(
+                text = errorMessage,
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.error
+            )
+        } else {
+            LazyColumn(modifier = Modifier.fillMaxSize()) {
+                items(recipes.orEmpty()) { recipe ->
+                    RecipeCard(recipe, navController);
+                    Modifier.testTag("recipe_${recipe.id}")
+                }
             }
         }
     }
 }
 
+// this is the card for each recipe there is
 @Composable
 fun RecipeCard(recipe: Recipe, navController: NavHostController) {
     Card(
         modifier = Modifier
+            .testTag("recipe_${recipe.title}")
             .fillMaxWidth()
             .padding(8.dp),
         shape = RoundedCornerShape(10.dp),
@@ -139,6 +138,7 @@ fun RecipeCard(recipe: Recipe, navController: NavHostController) {
                         navController.navigate("RecipeDetails/${recipe.id}")
                     },
                     modifier = Modifier
+                        .testTag("searchButton")
                         .align(Alignment.End)
                         .padding(top = 8.dp),
                     colors = ButtonDefaults.buttonColors(
@@ -152,6 +152,7 @@ fun RecipeCard(recipe: Recipe, navController: NavHostController) {
     }
 }
 
+// icon and text for each of the recipes
 @Composable
 fun IconAndText(text: String) {
     Row(verticalAlignment = Alignment.CenterVertically) {

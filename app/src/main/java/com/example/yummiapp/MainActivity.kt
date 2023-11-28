@@ -32,6 +32,7 @@ import com.example.yummiapp.bottomnavbar.ShoppingScreen
 import com.example.yummiapp.ui.theme.YummiAppTheme
 import com.example.yummiapp.viewmodels.RecipeViewModel
 
+
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,6 +45,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+// content for main screen
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreenContent() {
@@ -57,6 +59,7 @@ fun MainScreenContent() {
     }
 }
 
+// this is the bar that is at the bottom of the screen
 @Composable
 fun BottomNavigationBar(navController: NavHostController) {
     val items = listOf("Home", "Favorites", "Shopping")
@@ -82,13 +85,14 @@ fun BottomNavigationBar(navController: NavHostController) {
         }
     }
 }
-
+// returns current route
 @Composable
 fun currentRoute(navController: NavHostController): String? {
-    val navBackStackEntry = navController.currentBackStackEntryAsState()
-    return navBackStackEntry.value?.destination?.route
+    val navStackEntry = navController.currentBackStackEntryAsState()
+    return navStackEntry.value?.destination?.route
 }
 
+// container for the navigation
 @Composable
 fun NavHostContainer(navController: NavHostController, recipeViewModel: RecipeViewModel, innerPadding: PaddingValues) {
     NavHost(navController, startDestination = "Home", modifier = Modifier.padding(innerPadding)) {
@@ -96,8 +100,8 @@ fun NavHostContainer(navController: NavHostController, recipeViewModel: RecipeVi
         composable("Favorites") { FavoriteScreen() }
         composable("Shopping") { ShoppingScreen() }
         composable("Recipes/{query}") { backStackEntry ->
-            val query = backStackEntry.arguments?.getString("query") ?: ""
-            RecipeScreen(recipeViewModel, navController, query)
+            val searchQuery = backStackEntry.arguments?.getString("query") ?: ""
+            RecipeScreen(recipeViewModel, navController, searchQuery)
         }
         composable("RecipeDetails/{recipeId}") { backStackEntry ->
             val recipeId = backStackEntry.arguments?.getString("recipeId")
