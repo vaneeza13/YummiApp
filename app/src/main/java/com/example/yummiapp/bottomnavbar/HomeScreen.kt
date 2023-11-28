@@ -33,6 +33,10 @@ import com.example.yummiapp.R
 import com.example.yummiapp.viewmodels.RecipeViewModel
 
 
+/**
+ * Appens overskrift er blevet implementeret.
+ * Søgebjælken er blevet deklaeret
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(navController: NavHostController, recipeViewModel: RecipeViewModel = viewModel()) {
@@ -79,6 +83,9 @@ fun HomeScreen(navController: NavHostController, recipeViewModel: RecipeViewMode
     }
 }
 
+/**
+ * Søgebjælken er blevet implementeret.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchBar(
@@ -108,6 +115,9 @@ fun SearchBar(
     )
 }
 
+/**
+ * Opretter sektionen i brugergrænsefladen som indeholder en baggrund med billede og en overskrift.
+ */
 @Composable
 fun FeatureRecipeSection() {
     Surface(
