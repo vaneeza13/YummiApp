@@ -174,6 +174,7 @@ fun SearchBar(searchText: String, onSearchChanged: (String) -> Unit) {
     )
 }
 
+
 @Composable
 fun CategorySection(onCategoryClick: (String) -> Unit) {
     Text(
