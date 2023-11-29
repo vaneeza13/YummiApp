@@ -17,7 +17,7 @@ class CategoryTest {
 
     @Test
     fun testSelectCategoryAndCheckForRecipe() {
-        // Click on the "Breakfast" category
+        // selects the breakfast category
         composeTestRule.onNodeWithTag("breakfastCategory").performClick()
 
         composeTestRule.waitUntil(
@@ -29,7 +29,7 @@ class CategoryTest {
                     false
                 }
             },
-            timeoutMillis = 15000 // Adjust based on expected response time
+            timeoutMillis = 15000
         )
     }
 }
