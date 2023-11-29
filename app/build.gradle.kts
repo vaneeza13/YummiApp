@@ -21,8 +21,6 @@ android {
 
 
         }
-        // Cucumber test
-        testInstrumentationRunner = "io.cucumber.junit.Cucumber"
 
     }
 
@@ -76,19 +74,24 @@ dependencies {
     implementation("androidx.media3:media3-common:1.2.0")
 
     implementation ("androidx.navigation:navigation-compose:latest_version")
+    implementation("androidx.test.ext:junit-ktx:1.1.5")
 
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+
     androidTestImplementation(platform("androidx.compose:compose-bom:2023.03.00"))
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+    testImplementation ("androidx.compose.ui:ui-test-junit4:<compose_version>")
 
-    //Cucumber
-    androidTestImplementation ("io.cucumber:cucumber-java:7.14.1")
-    androidTestImplementation ("io.cucumber:cucumber-junit:7.14.1")
+    androidTestImplementation ("androidx.compose.ui:ui-test-junit4:<compose_version>")
+    androidTestImplementation ("androidx.compose.ui:ui-test-manifest:<compose_version>")
+    testImplementation("com.google.truth:truth:1.1.3")
+    androidTestImplementation("com.google.truth:truth:1.1.3")
+
 
 }
 

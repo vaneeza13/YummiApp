@@ -91,7 +91,7 @@ fun SearchBar(
         value = searchText,
         onValueChange = onSearchChanged,
         modifier = Modifier
-            .testTag("searchBar")
+            .testTag("searchBarField")
             .fillMaxWidth()
             .height(56.dp)
             .background(Color.White, RoundedCornerShape(8.dp)),
@@ -106,7 +106,7 @@ fun SearchBar(
             unfocusedBorderColor = Color.Transparent
         ),
         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
-        keyboardActions = KeyboardActions(onSearch = { onSearch() })
+        keyboardActions = KeyboardActions(onSearch = { onSearch.invoke() })
     )
 }
 
@@ -244,5 +244,4 @@ fun SeasonalItem(name: String, image: Painter) {
         Text(text = name)
     }
 }
-
 

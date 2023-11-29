@@ -86,10 +86,13 @@ fun RecipeScreen(
                 color = MaterialTheme.colorScheme.error
             )
         } else {
-            LazyColumn(modifier = Modifier.fillMaxSize()) {
+            LazyColumn(
+                modifier = Modifier
+                    .testTag("searchResultsContainer") // Place it here
+                    .fillMaxSize()
+            ) {
                 items(recipes.orEmpty()) { recipe ->
                     RecipeCard(recipe, navController);
-                    Modifier.testTag("recipe_${recipe.id}")
                 }
             }
         }
@@ -101,11 +104,11 @@ fun RecipeScreen(
 fun RecipeCard(recipe: Recipe, navController: NavHostController) {
     Card(
         modifier = Modifier
-            .testTag("recipe_${recipe.title}")
             .fillMaxWidth()
             .padding(8.dp),
         shape = RoundedCornerShape(10.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -124,8 +127,7 @@ fun RecipeCard(recipe: Recipe, navController: NavHostController) {
 
             Column(
                 modifier = Modifier
-                    .weight(1f)
-                    .padding(start = 8.dp)
+                    .fillMaxSize()
             ) {
                 Text(
                     text = recipe.title,
@@ -138,7 +140,6 @@ fun RecipeCard(recipe: Recipe, navController: NavHostController) {
                         navController.navigate("RecipeDetails/${recipe.id}")
                     },
                     modifier = Modifier
-                        .testTag("searchButton")
                         .align(Alignment.End)
                         .padding(top = 8.dp),
                     colors = ButtonDefaults.buttonColors(
