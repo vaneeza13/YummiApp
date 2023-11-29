@@ -32,6 +32,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.yummiapp.R
 import com.example.yummiapp.viewmodels.RecipeViewModel
+import java.util.Locale
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -208,6 +209,8 @@ fun CategoryItem(name: String, icon: Painter, onClick: () -> Unit) {
             .size(110.dp)
             .clip(RectangleShape)
             .clickable { onClick() }
+            .testTag("${name.lowercase(Locale.ROOT)}Category") // TEST TAG
+
     )
 }
 @Composable
