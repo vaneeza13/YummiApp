@@ -19,12 +19,33 @@ import java.util.UUID
 class RecipeViewModel : ViewModel() {
     private val myRecipes = mutableStateOf<List<Recipe>?>(null)
     val recipes: State<List<Recipe>?> = myRecipes
+
     private val myErrorMessages = mutableStateOf<String?>(null)
     val errorMessage: State<String?> = myErrorMessages
 
     private val _navigateToRecipes = mutableStateOf<String?>(null)
     val navigateToRecipes: State<String?> = _navigateToRecipes
 
+    private val _favoriteRecipes = mutableStateOf<List<Recipe>>(listOf())
+    val favoriteRecipes: State<List<Recipe>> = _favoriteRecipes
+
+    fun toggleFavorite(recipe: Recipe) {
+        val updatedRecipe = recipe.copy(isFavorited = !recipe.isFavorited)
+
+        //update the main recipes list with the updated recipe
+        myRecipes.value = myRecipes.value?.map {
+            if (it.id == recipe.id) updatedRecipe else it
+        }
+
+        //update  favorite recipes list
+        if (updatedRecipe.isFavorited) {
+            //add to favorites
+            _favoriteRecipes.value = _favoriteRecipes.value + updatedRecipe
+        } else {
+            //remove from favorites
+            _favoriteRecipes.value = _favoriteRecipes.value.filter { it.id != recipe.id }
+        }
+    }
     fun searchRecipesByIngredientAndServing(ingredient: String, servingAmount: String?) {
         viewModelScope.launch {
             val response = makeAPICall(ingredient)
@@ -133,5 +154,7 @@ data class Recipe(
     val ingredients: String,
     val servings: String,
     val instructions: String,
-    var imageUrl: String = "default_image_url"
+    var imageUrl: String = "default_image_url",
+    var isFavorited: Boolean = false
+
 )

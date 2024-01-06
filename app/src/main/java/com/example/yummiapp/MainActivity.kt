@@ -97,7 +97,9 @@ fun currentRoute(navController: NavHostController): String? {
 fun NavHostContainer(navController: NavHostController, recipeViewModel: RecipeViewModel, innerPadding: PaddingValues) {
     NavHost(navController, startDestination = "Home", modifier = Modifier.padding(innerPadding)) {
         composable("Home") { HomeScreen(navController, recipeViewModel) }
-        composable("Favorites") { FavoriteScreen() }
+        composable("Favorites") {
+            FavoriteScreen(viewModel = recipeViewModel, navController = navController)
+        }
         composable("Recipes/{query}") { backStackEntry ->
             val searchQuery = backStackEntry.arguments?.getString("query") ?: ""
             RecipeScreen(recipeViewModel, navController, searchQuery)
@@ -106,9 +108,9 @@ fun NavHostContainer(navController: NavHostController, recipeViewModel: RecipeVi
             val recipeId = backStackEntry.arguments?.getString("recipeId")
             val recipe = recipeViewModel.findRecipeById(recipeId)
             recipe?.let {
-                RecipeDetails(it, navController)
+                RecipeDetails(it, navController, viewModel = recipeViewModel)
             }
         }
-        composable("SearchByPreference") { SearchByPreferenceScreen(navController) }
+        composable("SearchByPreference") { SearchByPreferenceScreen(navController, viewModel = recipeViewModel) }
     }
 }
