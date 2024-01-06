@@ -28,7 +28,7 @@ import com.example.yummiapp.bottomnavbar.FavoriteScreen
 import com.example.yummiapp.bottomnavbar.HomeScreen
 import com.example.yummiapp.bottomnavbar.RecipeDetails
 import com.example.yummiapp.bottomnavbar.RecipeScreen
-import com.example.yummiapp.bottomnavbar.ShoppingScreen
+import com.example.yummiapp.bottomnavbar.SearchByPreferenceScreen
 import com.example.yummiapp.ui.theme.YummiAppTheme
 import com.example.yummiapp.viewmodels.RecipeViewModel
 
@@ -98,7 +98,6 @@ fun NavHostContainer(navController: NavHostController, recipeViewModel: RecipeVi
     NavHost(navController, startDestination = "Home", modifier = Modifier.padding(innerPadding)) {
         composable("Home") { HomeScreen(navController, recipeViewModel) }
         composable("Favorites") { FavoriteScreen() }
-        composable("Shopping") { ShoppingScreen() }
         composable("Recipes/{query}") { backStackEntry ->
             val searchQuery = backStackEntry.arguments?.getString("query") ?: ""
             RecipeScreen(recipeViewModel, navController, searchQuery)
@@ -110,5 +109,6 @@ fun NavHostContainer(navController: NavHostController, recipeViewModel: RecipeVi
                 RecipeDetails(it, navController)
             }
         }
+        composable("SearchByPreference") { SearchByPreferenceScreen(navController) }
     }
 }

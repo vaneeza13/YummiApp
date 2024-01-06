@@ -70,11 +70,13 @@ fun HomeScreen(navController: NavHostController, recipeViewModel: RecipeViewMode
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             FeatureRecipeSection()
-            SearchBar(searchText, onSearchChanged = { searchText = it }) {
+            SearchBar(searchText, onSearchChanged = { searchText = it }, onSearch = {
                 if (searchText.isNotBlank()) {
                     navController.navigate("Recipes/$searchText")
                 }
-            }
+            }, onMenuClick = {
+                navController.navigate("SearchByPreference")
+            })
             CategorySection(onCategoryClick = { category ->
                 navController.navigate("Recipes/$category")
             })
@@ -88,7 +90,8 @@ fun HomeScreen(navController: NavHostController, recipeViewModel: RecipeViewMode
 fun SearchBar(
     searchText: String,
     onSearchChanged: (String) -> Unit,
-    onSearch: () -> Unit
+    onSearch: () -> Unit,
+    onMenuClick: () -> Unit
 ) {
     OutlinedTextField(
         value = searchText,
@@ -99,7 +102,13 @@ fun SearchBar(
             .height(56.dp)
             .background(Color.White, RoundedCornerShape(8.dp)),
         placeholder = { Text(text = "Search for delicious recipes") },
-        leadingIcon = { Icon(Icons.Filled.Menu, contentDescription = null) },
+        leadingIcon = {
+            Icon(
+                Icons.Filled.Menu,
+                contentDescription = null,
+                Modifier.clickable { onMenuClick() }
+            )
+        },
         trailingIcon = { Icon(Icons.Filled.Search, contentDescription = null) },
         colors = TextFieldDefaults.outlinedTextFieldColors(
             textColor = Color.Black,
