@@ -13,13 +13,24 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.example.yummiapp.viewmodels.RecipeViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchByPreferenceScreen(navController: NavHostController) {
+fun SearchByPreferenceScreen(navController: NavHostController, viewModel: RecipeViewModel = viewModel()) {
     val (selectedIngredients, onIngredientSelected) = remember { mutableStateOf(setOf<String>()) }
     val (selectedServing, onServingSelected) = remember { mutableStateOf("") }
+    val (errorMessage, setErrorMessage) = remember { mutableStateOf<String?>(null) }
+    val navigateToRecipes by viewModel.navigateToRecipes
+
+    LaunchedEffect(navigateToRecipes) {
+        navigateToRecipes?.let {
+            navController.navigate("Recipes/$it")
+            viewModel.onNavigatedToRecipes()
+        }
+    }
 
     Scaffold(
         containerColor = Color(0xFFFFF5ED),
@@ -52,6 +63,7 @@ fun SearchByPreferenceScreen(navController: NavHostController) {
                     .padding(vertical = 16.dp)
                     .align(Alignment.Start)
             )
+
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
@@ -60,6 +72,7 @@ fun SearchByPreferenceScreen(navController: NavHostController) {
                 fontSize = 20.sp,
                 color = Color(0xFF4A2301)
             )
+
             Spacer(modifier = Modifier.height(16.dp))
 
             LazyVerticalGrid(
@@ -88,6 +101,7 @@ fun SearchByPreferenceScreen(navController: NavHostController) {
             }
 
             Spacer(modifier = Modifier.height(16.dp))
+
             Text(
                 "Serving amount:",
                 fontWeight = FontWeight.Bold,
@@ -113,8 +127,28 @@ fun SearchByPreferenceScreen(navController: NavHostController) {
             }
 
             Spacer(modifier = Modifier.height(16.dp))
+
+            if (errorMessage != null) {
+                Text(
+                    text = errorMessage,
+                    color = MaterialTheme.colorScheme.error,
+                    modifier = Modifier.padding(16.dp)
+                )
+            }
+
             Button(
-                onClick = { /* Implement search functionality */ },
+                onClick = {
+                    if (selectedIngredients.size > 1) {
+                        setErrorMessage("Please select only one ingredient")
+                    } else {
+                        setErrorMessage(null)
+                        val ingredient = selectedIngredients.firstOrNull()
+                        val serving = selectedServing.ifEmpty { null }
+                        if (ingredient != null) {
+                            viewModel.searchRecipesByIngredientAndServing(ingredient, serving)
+                        }
+                    }
+                },
                 shape = CircleShape,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -129,6 +163,7 @@ fun SearchByPreferenceScreen(navController: NavHostController) {
         }
     }
 }
+
 
 @Composable
 fun CheckboxWithText(text: String, checked: Boolean, onCheckedChange: (Boolean) -> Unit) {

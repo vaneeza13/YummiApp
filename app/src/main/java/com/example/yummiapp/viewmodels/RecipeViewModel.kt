@@ -22,13 +22,44 @@ class RecipeViewModel : ViewModel() {
     private val myErrorMessages = mutableStateOf<String?>(null)
     val errorMessage: State<String?> = myErrorMessages
 
+    private val _navigateToRecipes = mutableStateOf<String?>(null)
+    val navigateToRecipes: State<String?> = _navigateToRecipes
+
+    fun searchRecipesByIngredientAndServing(ingredient: String, servingAmount: String?) {
+        viewModelScope.launch {
+            val response = makeAPICall(ingredient)
+            if (response.isSuccessful) {
+                val data = response.body?.string()
+                data?.let {
+                    val type = object : TypeToken<List<Recipe>>() {}.type
+                    var recipesList = Gson().fromJson<List<Recipe>>(it, type)
+                    if (servingAmount != null) {
+                        recipesList = recipesList.filter { recipe -> recipe.servings == servingAmount }
+                    }
+                    recipesList = recipesList.map { recipe ->
+                        val uniqueID = UUID.randomUUID().toString()
+                        val imageFallback = async(Dispatchers.IO) { fetchImageFromPexels(recipe.title) }
+                        val imageUrl = imageFallback.await() ?: "default_image_url"
+                        recipe.copy(id = uniqueID, imageUrl = imageUrl)
+                    }
+                    myRecipes.value = recipesList
+                    _navigateToRecipes.value = ingredient
+                }
+            } else {
+                myErrorMessages.value = "Failed to get data. Error code: ${response.code}"
+            }
+        }
+    }
+    fun onNavigatedToRecipes() {
+        _navigateToRecipes.value = null
+    }
+
     fun searchRecipes(searchQuery: String) {
         viewModelScope.launch {
             try {
                 val response = makeAPICall(searchQuery)
                 val data = response.body?.string()
 
-                // if data isnt null then parse
                 if (data != null) {
                     val type = object : TypeToken<List<Recipe>>() {}.type
                     var recipesList = Gson().fromJson<List<Recipe>>(data, type)
@@ -93,6 +124,7 @@ class RecipeViewModel : ViewModel() {
         return recipes.value?.find { it.id == id }
     }
 }
+
 
 // Recipe data class
 data class Recipe(
