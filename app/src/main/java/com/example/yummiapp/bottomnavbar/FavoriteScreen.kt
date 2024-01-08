@@ -3,8 +3,10 @@ package com.example.yummiapp.bottomnavbar
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -26,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
@@ -36,26 +39,32 @@ import com.example.yummiapp.viewmodels.RecipeViewModel
 fun FavoriteScreen(viewModel: RecipeViewModel, navController: NavHostController) {
     val favoriteRecipes by viewModel.favoriteRecipes
 
-    Column(
+    Box(
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxSize()
             .background(Color(0xFFFFF5ED))
-            .padding(top = 16.dp)
     ) {
-        Text(
-            text = "Favorites",
-            style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier.padding(start = 16.dp, bottom = 16.dp),
-            color = Color.Black
-        )
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp)
+        ) {
+            Text(
+                text = "Favorites",
+                style = MaterialTheme.typography.headlineMedium,
+                modifier = Modifier.padding(start = 16.dp, bottom = 16.dp),
+                color = Color(0xFFFCAB64),
+                fontWeight = FontWeight.Bold
+            )
 
-        LazyColumn {
-            items(favoriteRecipes) { recipe ->
-                RecipeCard(
-                    recipe = recipe,
-                    navController = navController,
-                    toggleFavorite = viewModel::toggleFavorite
-                )
+            LazyColumn {
+                items(favoriteRecipes) { recipe ->
+                    RecipeCard(
+                        recipe = recipe,
+                        navController = navController,
+                        toggleFavorite = viewModel::toggleFavorite
+                    )
+                }
             }
         }
     }

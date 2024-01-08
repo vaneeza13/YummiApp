@@ -29,6 +29,7 @@ import com.example.yummiapp.bottomnavbar.HomeScreen
 import com.example.yummiapp.bottomnavbar.RecipeDetails
 import com.example.yummiapp.bottomnavbar.RecipeScreen
 import com.example.yummiapp.bottomnavbar.SearchByPreferenceScreen
+import com.example.yummiapp.bottomnavbar.ShoppingScreen
 import com.example.yummiapp.ui.theme.YummiAppTheme
 import com.example.yummiapp.viewmodels.RecipeViewModel
 
@@ -114,6 +115,9 @@ fun NavHostContainer(navController: NavHostController, recipeViewModel: RecipeVi
             }
         }
         composable("SearchByPreference") { SearchByPreferenceScreen(navController, viewModel = recipeViewModel) }
+        composable("Shopping") { ShoppingScreen() } // Added this line for ShoppingScreen
+
     }
+
 }
 }

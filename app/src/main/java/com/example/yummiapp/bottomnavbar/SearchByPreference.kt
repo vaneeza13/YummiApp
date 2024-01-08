@@ -56,7 +56,7 @@ fun SearchByPreferenceScreen(navController: NavHostController, viewModel: Recipe
 
             Text(
                 "Search by food preference here",
-                color = Color(0xFF4A2301),
+                color = Color(0xFFFCAB64),
                 fontWeight = FontWeight.Bold,
                 fontSize = 25.sp,
                 modifier = Modifier
@@ -70,7 +70,7 @@ fun SearchByPreferenceScreen(navController: NavHostController, viewModel: Recipe
                 "Ingredients:",
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
-                color = Color(0xFF4A2301)
+                color = Color(0xFFFCAB64)
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -106,7 +106,7 @@ fun SearchByPreferenceScreen(navController: NavHostController, viewModel: Recipe
                 "Serving amount:",
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
-                color = Color(0xFF4A2301)
+                color = Color(0xFFFCAB64)
             )
 
             val servings = listOf("1", "2", "3", "4", "5", "6+")
