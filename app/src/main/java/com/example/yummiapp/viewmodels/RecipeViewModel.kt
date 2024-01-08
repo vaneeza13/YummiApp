@@ -1,8 +1,10 @@
 package com.example.yummiapp.viewmodels
 
+import android.content.Context
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -16,7 +18,10 @@ import okhttp3.Response
 import org.json.JSONObject
 import java.util.UUID
 
-class RecipeViewModel : ViewModel() {
+class RecipeViewModel(private val context: Context) : ViewModel() {
+    private val sharedPreferences = context.getSharedPreferences("YummiAppPreferences", Context.MODE_PRIVATE)
+    private val gson = Gson()
+
     private val myRecipes = mutableStateOf<List<Recipe>?>(null)
     val recipes: State<List<Recipe>?> = myRecipes
 
@@ -29,21 +34,47 @@ class RecipeViewModel : ViewModel() {
     private val _favoriteRecipes = mutableStateOf<List<Recipe>>(listOf())
     val favoriteRecipes: State<List<Recipe>> = _favoriteRecipes
 
+    init {
+        loadFavorites()
+    }
+
+    private fun loadFavorites() {
+        val favoritesJson = sharedPreferences.getString("favorites", null)
+        if (favoritesJson != null) {
+            val type = object : TypeToken<List<Recipe>>() {}.type
+            _favoriteRecipes.value = gson.fromJson(favoritesJson, type)
+        }
+    }
+
     fun toggleFavorite(recipe: Recipe) {
         val updatedRecipe = recipe.copy(isFavorited = !recipe.isFavorited)
 
-        //update the main recipes list with the updated recipe
         myRecipes.value = myRecipes.value?.map {
             if (it.id == recipe.id) updatedRecipe else it
         }
 
-        //update  favorite recipes list
         if (updatedRecipe.isFavorited) {
-            //add to favorites
             _favoriteRecipes.value = _favoriteRecipes.value + updatedRecipe
         } else {
-            //remove from favorites
             _favoriteRecipes.value = _favoriteRecipes.value.filter { it.id != recipe.id }
+        }
+        saveFavorites()
+    }
+
+    private fun saveFavorites() {
+        val editor = sharedPreferences.edit()
+        val favoritesJson = gson.toJson(_favoriteRecipes.value)
+        editor.putString("favorites", favoritesJson)
+        editor.apply()
+    }
+
+    class RecipeViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(RecipeViewModel::class.java)) {
+                @Suppress("UNCHECKED_CAST")
+                return RecipeViewModel(context) as T
+            }
+            throw IllegalArgumentException("Unknown ViewModel class")
         }
     }
     fun searchRecipesByIngredientAndServing(ingredient: String, servingAmount: String?) {

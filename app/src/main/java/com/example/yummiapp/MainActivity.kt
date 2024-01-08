@@ -39,18 +39,21 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             YummiAppTheme {
-                MainScreenContent()
+                //using the factory to create the ViewModel
+                val recipeViewModel: RecipeViewModel = viewModel(factory = RecipeViewModel.RecipeViewModelFactory(
+                    applicationContext
+                )
+                )
+                MainScreenContent(recipeViewModel)
             }
         }
     }
-}
 
-// content for main screen
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreenContent() {
+fun MainScreenContent(recipeViewModel: RecipeViewModel) {
+    //use the passed viewModel instead of creating a new one
     val navController = rememberNavController()
-    val recipeViewModel: RecipeViewModel = viewModel()
 
     Scaffold(
         bottomBar = { BottomNavigationBar(navController) }
@@ -58,7 +61,6 @@ fun MainScreenContent() {
         NavHostContainer(navController, recipeViewModel, innerPadding)
     }
 }
-
 // this is the bar that is at the bottom of the screen
 @Composable
 fun BottomNavigationBar(navController: NavHostController) {
@@ -113,4 +115,5 @@ fun NavHostContainer(navController: NavHostController, recipeViewModel: RecipeVi
         }
         composable("SearchByPreference") { SearchByPreferenceScreen(navController, viewModel = recipeViewModel) }
     }
+}
 }

@@ -3,6 +3,7 @@ package com.example.yummiapp.bottomnavbar
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -18,6 +19,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -74,12 +76,22 @@ fun RecipeDetails(recipe: Recipe, navController: NavHostController, viewModel: R
 
         // favorite  button
         item {
-            IconButton(onClick = { viewModel.toggleFavorite(recipe) }) {
-                Icon(
-                    imageVector = if (recipe.isFavorited) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
-                    contentDescription = "Favorite",
-                    tint = if (recipe.isFavorited) Color.Red else Color.Gray // Change color based on favorite status
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(bottom = 8.dp)
+            ) {
+                Text(
+                    text = "Add to favorites",
+                    style = MaterialTheme.typography.bodyLarge
                 )
+
+                IconButton(onClick = { viewModel.toggleFavorite(recipe) }) {
+                    Icon(
+                        imageVector = if (recipe.isFavorited) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                        contentDescription = "Favorite",
+                        tint = if (recipe.isFavorited) Color.Red else Color.Gray
+                    )
+                }
             }
         }
 
