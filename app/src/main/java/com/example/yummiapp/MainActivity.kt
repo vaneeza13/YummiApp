@@ -24,14 +24,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.yummiapp.bottomnavbar.FavoriteScreen
-import com.example.yummiapp.bottomnavbar.HomeScreen
-import com.example.yummiapp.bottomnavbar.RecipeDetails
-import com.example.yummiapp.bottomnavbar.RecipeScreen
-import com.example.yummiapp.bottomnavbar.SearchByPreferenceScreen
-import com.example.yummiapp.bottomnavbar.ShoppingScreen
+import com.example.yummiapp.view.FavoriteScreen
+import com.example.yummiapp.view.HomeScreen
+import com.example.yummiapp.view.RecipeDetails
+import com.example.yummiapp.view.RecipeScreen
+import com.example.yummiapp.view.SearchByPreferenceScreen
+import com.example.yummiapp.view.ShoppingScreen
 import com.example.yummiapp.ui.theme.YummiAppTheme
-import com.example.yummiapp.viewmodels.RecipeViewModel
+import com.example.yummiapp.viewmodel.RecipeViewModel
 
 
 class MainActivity : ComponentActivity() {

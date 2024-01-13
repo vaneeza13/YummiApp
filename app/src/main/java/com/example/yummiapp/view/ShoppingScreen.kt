@@ -1,4 +1,4 @@
-package com.example.yummiapp.bottomnavbar
+package com.example.yummiapp.view
 
 import android.content.Context
 import androidx.compose.foundation.background

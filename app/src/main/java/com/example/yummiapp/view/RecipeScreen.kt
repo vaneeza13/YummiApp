@@ -1,4 +1,4 @@
-package com.example.yummiapp.bottomnavbar
+package com.example.yummiapp.view
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -31,8 +31,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
-import com.example.yummiapp.viewmodels.Recipe
-import com.example.yummiapp.viewmodels.RecipeViewModel
+import com.example.yummiapp.model.Recipe
+import com.example.yummiapp.viewmodel.RecipeViewModel
 
 @Composable
 fun RecipeScreen(

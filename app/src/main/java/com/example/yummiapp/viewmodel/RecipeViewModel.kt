@@ -1,4 +1,4 @@
-package com.example.yummiapp.viewmodels
+package com.example.yummiapp.viewmodel
 
 import android.content.Context
 import androidx.compose.runtime.State
@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.yummiapp.model.Recipe
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
@@ -177,14 +178,3 @@ class RecipeViewModel(private val context: Context) : ViewModel() {
 }
 
 
-// Recipe data class
-data class Recipe(
-    val id: String = UUID.randomUUID().toString(),
-    val title: String,
-    val ingredients: String,
-    val servings: String,
-    val instructions: String,
-    var imageUrl: String = "default_image_url",
-    var isFavorited: Boolean = false
-
-)

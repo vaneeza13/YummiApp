@@ -1,4 +1,4 @@
-package com.example.yummiapp.bottomnavbar
+package com.example.yummiapp.view
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.yummiapp.R
-import com.example.yummiapp.viewmodels.RecipeViewModel
+import com.example.yummiapp.viewmodel.RecipeViewModel
 import java.util.Locale
 
 

@@ -1,4 +1,4 @@
-package com.example.yummiapp.viewmodels
+package com.example.yummiapp.viewmodel
 
 import okhttp3.OkHttpClient
 
