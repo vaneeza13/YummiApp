@@ -12,10 +12,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import org.json.JSONObject
+import java.io.IOException
 import java.util.UUID
 
 class RecipeViewModel(private val context: Context) : ViewModel() {
@@ -133,34 +133,32 @@ class RecipeViewModel(private val context: Context) : ViewModel() {
             }
         }
     }
-    // this function fetch generated images from Pexel API
+    // this function fetch generated images from Pexel API, uses singleton OkHttpClient
     private suspend fun fetchImageFromPexels(query: String): String? = withContext(Dispatchers.IO) {
-        val client = OkHttpClient()
         val request = Request.Builder()
             .url("https://api.pexels.com/v1/search?query=$query&per_page=1")
             .addHeader("Authorization", "gRiSNHpatgu0b7CMypuPFJaNQ9HDjT4lnaCfQyCHs2pelVZs26Hp4n0g")
             .build()
 
-        // this is response from API getting the object
         try {
-            client.newCall(request).execute().use { response ->
-                if (!response.isSuccessful) return@withContext null
-
-                val jsonResponse = JSONObject(response.body?.string())
-                val firstImageUrl = jsonResponse.getJSONArray("photos").getJSONObject(0).getJSONObject("src").getString("medium")
-
-                return@withContext firstImageUrl
+            SingletonClient.httpClient.newCall(request).execute().use { response ->
+                if (response.isSuccessful) {
+                    val jsonResponse = JSONObject(response.body?.string())
+                    return@withContext jsonResponse.getJSONArray("photos")
+                        .getJSONObject(0)
+                        .getJSONObject("src")
+                        .getString("medium")
+                }
+                return@withContext null
             }
-        } catch (e: Exception) {
+        } catch (e: IOException) {
             e.printStackTrace()
-            return@withContext null
+            null
         }
     }
 
-    //  get API to fetch recipes
+    //uses singleton OkHttpClient to call api for recipe
     private suspend fun makeAPICall(query: String): Response = withContext(Dispatchers.IO) {
-        val client = OkHttpClient()
-
         val request = Request.Builder()
             .url("https://recipe-by-api-ninjas.p.rapidapi.com/v1/recipe?query=$query")
             .get()
@@ -168,13 +166,14 @@ class RecipeViewModel(private val context: Context) : ViewModel() {
             .addHeader("X-RapidAPI-Host", "recipe-by-api-ninjas.p.rapidapi.com")
             .build()
 
-        return@withContext client.newCall(request).execute()
+        return@withContext SingletonClient.httpClient.newCall(request).execute()
     }
 
     // find the recipe by its id
     fun findRecipeById(id: String?): Recipe? {
         return recipes.value?.find { it.id == id }
     }
+
 }
 
 
