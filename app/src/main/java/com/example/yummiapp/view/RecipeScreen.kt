@@ -30,7 +30,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
 import com.example.yummiapp.model.Recipe
 import com.example.yummiapp.viewmodel.RecipeViewModel
 
@@ -117,7 +117,7 @@ fun RecipeCard(recipe: Recipe, navController: NavHostController) {
                 .padding(16.dp)
         ) {
             Image(
-                painter = rememberImagePainter(recipe.imageUrl),
+                painter = rememberAsyncImagePainter(recipe.imageUrl),
                 contentDescription = "Recipe Image",
                 modifier = Modifier
                     .size(120.dp)
