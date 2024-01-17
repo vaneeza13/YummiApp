@@ -17,14 +17,17 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.yummiapp.viewmodel.RecipeViewModel
 
+//composable function for searching recipes by preferences
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchByPreferenceScreen(navController: NavHostController, viewModel: RecipeViewModel = viewModel()) {
+    // state variables: selected ingredients, serving size, and error messages
     val (selectedIngredients, onIngredientSelected) = remember { mutableStateOf(setOf<String>()) }
     val (selectedServing, onServingSelected) = remember { mutableStateOf("") }
     val (errorMessage, setErrorMessage) = remember { mutableStateOf<String?>(null) }
     val navigateToRecipes by viewModel.navigateToRecipes
 
+    //navigate when a recipe is selected
     LaunchedEffect(navigateToRecipes) {
         navigateToRecipes?.let {
             navController.navigate("Recipes/$it")
@@ -32,6 +35,7 @@ fun SearchByPreferenceScreen(navController: NavHostController, viewModel: Recipe
         }
     }
 
+    //layout
     Scaffold(
         containerColor = Color(0xFFFFF5ED),
         contentColor = Color(0xFF4A2301)
@@ -128,6 +132,7 @@ fun SearchByPreferenceScreen(navController: NavHostController, viewModel: Recipe
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            //show error message if any
             if (errorMessage != null) {
                 Text(
                     text = errorMessage,
@@ -135,7 +140,7 @@ fun SearchByPreferenceScreen(navController: NavHostController, viewModel: Recipe
                     modifier = Modifier.padding(16.dp)
                 )
             }
-
+            //search button for recipe search
             Button(
                 onClick = {
                     if (selectedIngredients.size > 1) {
@@ -164,7 +169,7 @@ fun SearchByPreferenceScreen(navController: NavHostController, viewModel: Recipe
     }
 }
 
-
+//custom composable for checkbox
 @Composable
 fun CheckboxWithText(text: String, checked: Boolean, onCheckedChange: (Boolean) -> Unit) {
     val checkboxColors = CheckboxDefaults.colors(
@@ -195,6 +200,7 @@ fun CheckboxWithText(text: String, checked: Boolean, onCheckedChange: (Boolean) 
     }
 }
 
+//custom composable for radio button
 @Composable
 fun RadioButtonWithText(text: String, selected: Boolean, onSelect: () -> Unit) {
     val radioButtonColors = RadioButtonDefaults.colors(

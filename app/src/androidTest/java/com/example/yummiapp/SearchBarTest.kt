@@ -15,7 +15,7 @@ class SearchBarTest {
     @get:Rule
     val activityScenarioRule = ActivityScenarioRule(MainActivity::class.java)
 
-    //test search bar for a specific recipe
+    //test search bar for a specific recipe in this case it is pasta
     @Test
     fun testSearchBarForSpecificRecipe() {
         composeTestRule.onNodeWithTag("searchBarField").performTextInput("pasta")

@@ -19,10 +19,14 @@ import org.json.JSONObject
 import java.io.IOException
 import java.util.UUID
 
+//viewModel class for managing recipe related data and operations
 class RecipeViewModel(private val context: Context) : ViewModel() {
+    //shared preferences for storing and getting local data
     private val sharedPreferences = context.getSharedPreferences("YummiAppPreferences", Context.MODE_PRIVATE)
+    //for serialization and deserialization
     private val gson = Gson()
 
+    //state for recipes, error messages, navigation triggers, and favorite recipes
     private val myRecipes = mutableStateOf<List<Recipe>?>(null)
     val recipes: State<List<Recipe>?> = myRecipes
 
@@ -35,10 +39,12 @@ class RecipeViewModel(private val context: Context) : ViewModel() {
     private val _favoriteRecipes = mutableStateOf<List<Recipe>>(listOf())
     val favoriteRecipes: State<List<Recipe>> = _favoriteRecipes
 
+    //block to load favorites when viewmodel is created
     init {
         loadFavorites()
     }
 
+    //load favorite recipes from shared preferences
     private fun loadFavorites() {
         val favoritesJson = sharedPreferences.getString("favorites", null)
         if (favoritesJson != null) {
@@ -46,7 +52,7 @@ class RecipeViewModel(private val context: Context) : ViewModel() {
             _favoriteRecipes.value = gson.fromJson(favoritesJson, type)
         }
     }
-
+    // status of a recipe in favorite and update list in shared preferences
     fun toggleFavorite(recipe: Recipe) {
         val updatedRecipe = recipe.copy(isFavorited = !recipe.isFavorited)
 
@@ -61,14 +67,14 @@ class RecipeViewModel(private val context: Context) : ViewModel() {
         }
         saveFavorites()
     }
-
+    //save the current list of favorite recipes to shared preferences
     private fun saveFavorites() {
         val editor = sharedPreferences.edit()
         val favoritesJson = gson.toJson(_favoriteRecipes.value)
         editor.putString("favorites", favoritesJson)
         editor.apply()
     }
-
+    //factory class to instantiate viewmodel with a context
     class RecipeViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(RecipeViewModel::class.java)) {
@@ -78,6 +84,7 @@ class RecipeViewModel(private val context: Context) : ViewModel() {
             throw IllegalArgumentException("Unknown ViewModel class")
         }
     }
+    //search for recipes based on ingredient and serving amount
     fun searchRecipesByIngredientAndServing(ingredient: String, servingAmount: String?) {
         viewModelScope.launch {
             val response = makeAPICall(ingredient)
@@ -103,10 +110,11 @@ class RecipeViewModel(private val context: Context) : ViewModel() {
             }
         }
     }
+    //clear navigation trigger after navigating to a recipe
     fun onNavigatedToRecipes() {
         _navigateToRecipes.value = null
     }
-
+    //search for recipes based on a search query
     fun searchRecipes(searchQuery: String) {
         viewModelScope.launch {
             try {
@@ -134,7 +142,7 @@ class RecipeViewModel(private val context: Context) : ViewModel() {
             }
         }
     }
-    // this function fetch generated images from Pexel API, uses singleton OkHttpClient
+    // this function fetch generated images from Pexel API
     private suspend fun fetchImageFromPexels(query: String): String? = withContext(Dispatchers.IO) {
         val request = Request.Builder()
             .url("https://api.pexels.com/v1/search?query=$query&per_page=1")
@@ -158,7 +166,7 @@ class RecipeViewModel(private val context: Context) : ViewModel() {
         }
     }
 
-    //uses singleton OkHttpClient to call api for recipe
+    //call api for recipe
     private suspend fun makeAPICall(query: String): Response = withContext(Dispatchers.IO) {
         val request = Request.Builder()
             .url("https://recipe-by-api-ninjas.p.rapidapi.com/v1/recipe?query=$query")

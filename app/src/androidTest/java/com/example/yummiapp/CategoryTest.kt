@@ -15,6 +15,7 @@ class CategoryTest {
     @get:Rule
     val activityScenarioRule = ActivityScenarioRule(MainActivity::class.java)
 
+    //test for when user click on a category
     @Test
     fun testSelectCategoryAndCheckForRecipe() {
         // selects the breakfast category

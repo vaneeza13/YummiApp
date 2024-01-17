@@ -29,7 +29,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.yummiapp.model.Recipe
 import com.example.yummiapp.viewmodel.RecipeViewModel
 
-
+//composable function for the details of recipe
 @Composable
 fun RecipeDetails(recipe: Recipe, navController: NavHostController, viewModel: RecipeViewModel) {
     LazyColumn(

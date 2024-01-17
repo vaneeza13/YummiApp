@@ -35,8 +35,10 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.yummiapp.model.Recipe
 import com.example.yummiapp.viewmodel.RecipeViewModel
 
+//composable func for the saved recipes
 @Composable
 fun FavoriteScreen(viewModel: RecipeViewModel, navController: NavHostController) {
+    //get favorite recipes from the view model
     val favoriteRecipes by viewModel.favoriteRecipes
 
     Box(
@@ -69,7 +71,7 @@ fun FavoriteScreen(viewModel: RecipeViewModel, navController: NavHostController)
         }
     }
 }
-
+//composable function for displaying one single recipe card
 @Composable
 fun RecipeCard(recipe: Recipe, navController: NavHostController, toggleFavorite: (Recipe) -> Unit) {
     Card(

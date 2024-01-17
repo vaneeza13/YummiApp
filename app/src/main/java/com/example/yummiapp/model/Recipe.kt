@@ -2,7 +2,7 @@ package com.example.yummiapp.model
 
 import java.util.UUID
 
-// Recipe data class
+//recipe data
 data class Recipe(
     val id: String = UUID.randomUUID().toString(),
     val title: String,

@@ -24,16 +24,17 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.yummiapp.ui.theme.YummiAppTheme
 import com.example.yummiapp.view.FavoriteScreen
 import com.example.yummiapp.view.HomeScreen
 import com.example.yummiapp.view.RecipeDetails
 import com.example.yummiapp.view.RecipeScreen
 import com.example.yummiapp.view.SearchByPreferenceScreen
 import com.example.yummiapp.view.ShoppingScreen
-import com.example.yummiapp.ui.theme.YummiAppTheme
 import com.example.yummiapp.viewmodel.RecipeViewModel
 
 
+//entry point of the app and sets up ViewModel
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,7 +50,8 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-
+    
+// display main content
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreenContent(recipeViewModel: RecipeViewModel) {

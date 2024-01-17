@@ -18,10 +18,13 @@ import androidx.compose.ui.unit.dp
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
+//cmposable function for managing a shopping list
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShoppingScreen() {
+    //context from local environment
     val context = LocalContext.current
+    //state variables for ingredient text input and list of ingredients
     var ingredientText by remember { mutableStateOf("") }
     val allIngredients = remember { mutableStateListOf<Ingredient>() }
     val unCheckedIngredients = allIngredients.filter { !it.isChecked }.toMutableStateList()
@@ -31,7 +34,7 @@ fun ShoppingScreen() {
         allIngredients.addAll(loadShoppingList(context))
         unCheckedIngredients.addAll(allIngredients.filter { !it.isChecked })
     }
-
+    // layout content
     Scaffold(
         topBar = {
             TopAppBar(
@@ -94,6 +97,7 @@ fun ShoppingScreen() {
                 }
             }
             Spacer(modifier = Modifier.height(8.dp))
+            //loop over unchecked ingredients to display them
             unCheckedIngredients.forEachIndexed { _, ingredient ->
                 IngredientItem(ingredient = ingredient) {
                     val updatedIngredient = ingredient.copy(isChecked = true)
@@ -112,6 +116,7 @@ fun ShoppingScreen() {
     }
 }
 
+//composable function for displaying a ingredient item
 @Composable
 fun IngredientItem(ingredient: Ingredient, onCheckChanged: () -> Unit) {
     Row(
@@ -137,11 +142,12 @@ fun IngredientItem(ingredient: Ingredient, onCheckChanged: () -> Unit) {
     }
 }
 
+//data class for ingredient
 data class Ingredient(
     val name: String,
     var isChecked: Boolean
 )
-
+//function to save list of ingredient
 fun saveShoppingList(context: Context, ingredients: List<Ingredient>) {
     val sharedPreferences = context.getSharedPreferences("YummiAppPreferences", Context.MODE_PRIVATE)
     val editor = sharedPreferences.edit()
@@ -149,7 +155,7 @@ fun saveShoppingList(context: Context, ingredients: List<Ingredient>) {
     editor.putString("shoppingList", json)
     editor.apply()
 }
-
+//function that load list of ingredint
 fun loadShoppingList(context: Context): List<Ingredient> {
     val sharedPreferences = context.getSharedPreferences("YummiAppPreferences", Context.MODE_PRIVATE)
     val json = sharedPreferences.getString("shoppingList", null)

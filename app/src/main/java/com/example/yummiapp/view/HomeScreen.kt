@@ -36,12 +36,14 @@ import com.example.yummiapp.R
 import com.example.yummiapp.viewmodel.RecipeViewModel
 import java.util.Locale
 
-
+//composable function for the main screen
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(navController: NavHostController, recipeViewModel: RecipeViewModel = viewModel()) {
+    //state for managing search text
     var searchText by remember { mutableStateOf("") }
 
+    //layout
     Scaffold(
         topBar = {
             TopAppBar(
@@ -84,7 +86,7 @@ fun HomeScreen(navController: NavHostController, recipeViewModel: RecipeViewMode
         }
     }
 }
-
+//search bar
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchBar(
@@ -122,6 +124,7 @@ fun SearchBar(
     )
 }
 
+// featured recipe in header
 @Composable
 fun FeatureRecipeSection() {
     Surface(
@@ -155,6 +158,7 @@ fun FeatureRecipeSection() {
     }
 }
 
+// categories
 @Composable
 fun CategorySection(onCategoryClick: (String) -> Unit) {
     Text(
@@ -224,6 +228,7 @@ fun CategoryItem(name: String, icon: Painter, onClick: () -> Unit) {
 
     )
 }
+// seasonal ingredients
 @Composable
 fun SeasonalSection() {
     Text(

@@ -34,6 +34,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.yummiapp.model.Recipe
 import com.example.yummiapp.viewmodel.RecipeViewModel
 
+//composable for when browsing through recipes
 @Composable
 fun RecipeScreen(
     recipeViewModel: RecipeViewModel,
